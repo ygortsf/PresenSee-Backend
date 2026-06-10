@@ -4,6 +4,19 @@ API RESTful para o sistema de monitoramento de frequência escolar e prevenção
 
 ---
 
+# 👨‍💻 Equipe
+
+- Miguel Augusto
+- Echilin Taina
+- Ygor de Tárcio
+- Maysa Clara
+- Ludmylla Dias
+- Matheus Vinnycius
+- Pedro Henrique Jerônimo
+- Gabriel Soares
+
+---
+
 ## 🚀 Como rodar
 
 ```bash
