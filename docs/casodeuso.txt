@@ -1,0 +1,193 @@
+Disciplina: Projeto Integrador 4 (PI4) - 4º Período
+Projeto: PresenSee
+
+Equipe: Pedro Henrique Jerônimo Da Silva, Miguel, Echilin, Ygor, Maysa, Ludmylla, 
+Matheus e Gabriel.
+
+1. ESPECIFICAÇÃO DOS CASOS DE USO
+Caso de Uso 01
+Identificador: UC-01
+Nome: Autenticação de Usuário (Login)
+Descrição: Permite que os usuários (alunos e professores) acessem o sistema 
+PresenSee com suas credenciais para utilizar as funcionalidades de controle de 
+presença.
+Atores: Aluno, Professor.
+Pré-condições: O usuário deve possuir um cadastro ativo e válido no sistema 
+PresenSee.
+Pós-condições: O usuário é autenticado, sua sessão é iniciada e ele é redirecionado 
+para a tela inicial (Dashboard) correspondente ao seu perfil.
+Fluxo Principal:
+1. O usuário acessa a página inicial do PresenSee.
+2. O sistema exibe o formulário de login solicitando E-mail e Senha.
+3. O usuário insere seu E-mail e Senha.
+4. O usuário clica no botão "Entrar".
+5. O sistema valida as credenciais no banco de dados.
+6. O sistema confirma a autenticação e redireciona o usuário para o Dashboard.
+Fluxos Alternativos:
+FA-01: Credenciais Inválidas: No passo 5, se o e-mail ou a senha estiverem incorretos, 
+o sistema exibe a mensagem de erro "E-mail ou senha inválidos" e limpa o campo de 
+senha.
+FA-02: Campos em branco: No passo 4, se o usuário deixar algum campo vazio, o 
+sistema bloqueia o envio e exibe um alerta indicando que "Todos os campos são 
+obrigatórios".
+Caso de Uso 02
+Identificador: UC-02
+Nome: Registro de Presença
+Descrição: Permite que o aluno registre sua presença em uma aula ativa informando 
+um código de chamada (ou lendo um QR Code) disponibilizado pelo professor.
+Atores: Aluno.
+Pré-condições: O aluno deve estar logado no sistema e o professor precisa ter aberto 
+uma sessão de chamada ativa para a respectiva disciplina.
+Pós-condições: A presença do aluno é registrada no banco de dados e computada no 
+relatório da disciplina.
+Fluxo Principal:
+1. O aluno acessa a aba "Registrar Presença" no Dashboard.
+2. O sistema exibe um campo de entrada para o "Código da Aula".
+3. O aluno digita o código fornecido pelo professor.
+4. O aluno clica no botão "Confirmar Presença".
+5. O sistema verifica a validade e a vigência do código.
+6. O sistema vincula o aluno à aula e exibe a mensagem de sucesso "Presença 
+registrada com sucesso!".
+
+Fluxos Alternativos:
+FA-01: Código Inválido/Expirado: No passo 5, se o código digitado não existir ou a 
+chamada já tiver sido encerrada, o sistema exibe a mensagem de erro "Código inválido 
+ou aula encerrada".
+FA-02: Presença já registrada: No passo 5, se o aluno já tiver computado presença para 
+aquela sessão específica anteriormente, o sistema alerta "Atenção: Sua presença 
+nesta aula já foi registrada".
+
+
+2. CASOS DE TESTE
+Casos de Teste para o UC-01 (Autenticação)
+CT-01.1
+Identificador: CT-01.1
+Caso de uso associado: UC-01
+Objetivo: Verificar se o sistema realiza login corretamente com dados válidos (Caminho 
+Feliz).
+Entrada: E-mail cadastrado ("aluno@unicap.br"), Senha correta ("senha123").
+Passos:
+1. Acessar a tela de login.
+2. Preencher o e-mail.
+3. Preencher a senha.
+4. Clicar em "Entrar".
+Resultado Esperado: O sistema deve autenticar o usuário e redirecioná-lo para a tela 
+principal (Dashboard).
+Urgência: Alta.
+CT-01.2
+Identificador: CT-01.2
+Caso de uso associado: UC-01
+Objetivo: Verificar o comportamento do sistema ao tentar logar com senha incorreta 
+(Situação de falha).
+Entrada: E-mail cadastrado ("aluno@unicap.br"), Senha incorreta ("senhaerrada").
+Passos:
+1. Acessar a tela de login.
+2. Preencher e-mail.
+3. Preencher senha incorreta.
+4. Clicar em "Entrar".
+Resultado Esperado: O login não deve ser realizado e o sistema deve exibir a 
+mensagem "E-mail ou senha inválidos".
+Urgência: Alta.
+CT-01.3
+Identificador: CT-01.3
+Caso de uso associado: UC-01
+Objetivo: Verificar a validação de formato do campo de e-mail (Validação de dados).
+Entrada: E-mail mal formatado ("alunounicap.br" - sem o @), Senha qualquer.
+Passos:
+1. Inserir e-mail sem @.
+2. Inserir senha.
+3. Clicar em "Entrar".
+Resultado Esperado: O sistema deve reter o envio do formulário e exibir validação de 
+front-end: "Insira um endereço de e-mail válido".
+Urgência: Média.
+CT-01.4
+Identificador: CT-01.4
+Caso de uso associado: UC-01
+Objetivo: Impedir o login com o campo de senha em branco (Fluxo alternativo).
+Entrada: E-mail ("aluno@unicap.br"), Senha (vazio).
+Passos:
+1. Preencher e-mail.
+2. Deixar campo de senha vazio.
+3. Clicar em "Entrar".
+Resultado Esperado: O sistema não deve fazer a requisição à API e deve alertar que 
+"Todos os campos são obrigatórios".
+Urgência: Alta.
+CT-01.5
+Identificador: CT-01.5
+Caso de uso associado: UC-01
+Objetivo: Verificar a resposta ao tentar acessar com um usuário não cadastrado.
+Entrada: E-mail inexistente ("naocadastrado@teste.com"), Senha ("12345").
+Passos:
+1. Inserir e-mail não existente.
+2. Inserir senha.
+3. Clicar em "Entrar".
+Resultado Esperado: O sistema deve exibir a mensagem informando "Usuário não 
+encontrado" ou "Credenciais inválidas".
+Urgência: Alta.
+Casos de Teste para o UC-02 (Registro de Presença)
+CT-02.1
+Identificador: CT-02.1
+Caso de uso associado: UC-02
+Objetivo: Verificar se a presença é computada com sucesso ao inserir um código de 
+aula ativo (Execução esperada).
+Entrada: Código válido ("PI4-2026-X").
+Passos:
+1. Logar no sistema.
+2. Acessar "Registrar Presença".
+3. Inserir o código válido.
+4. Clicar em "Confirmar Presença".
+Resultado Esperado: O sistema deve salvar o registro no backend e exibir "Presença 
+registrada com sucesso!".
+Urgência: Alta.
+CT-02.2
+Identificador: CT-02.2
+Caso de uso associado: UC-02
+Objetivo: Verificar a validação do sistema com um código expirado (Situação de falha).
+Entrada: Código de uma aula já encerrada pelo professor.
+Passos:
+1. Acessar "Registrar Presença".
+2. Inserir código expirado.
+3. Clicar em confirmar.
+Resultado Esperado: O sistema não deve registrar presença e deve exibir o erro 
+"Atenção: Aula encerrada pelo professor".
+Urgência: Alta.
+CT-02.3
+Identificador: CT-02.3
+Caso de uso associado: UC-02
+Objetivo: Evitar duplicidade de presença pelo mesmo aluno (Validação de regra de 
+negócio).
+Entrada: Código válido (o mesmo que o aluno já utilizou para registrar presença há 5 
+minutos).
+Passos:
+1. Acessar registro de presença.
+2. Inserir o código já utilizado.
+3. Confirmar.
+Resultado Esperado: O sistema deve cruzar os dados e exibir "Sua presença nesta aula 
+já foi registrada".
+Urgência: Média.
+CT-02.4
+Identificador: CT-02.4
+Caso de uso associado: UC-02
+Objetivo: Validar o envio com o campo do código vazio (Validação de dados).
+Entrada: Campo de código vazio ("").
+Passos:
+1. Deixar o campo em branco.
+2. Clicar em "Confirmar Presença".
+Resultado Esperado: O botão não deve submeter a requisição e um alerta "O código da 
+aula é obrigatório" deve ser exibido.
+Urgência: Baixa.
+CT-02.5
+Identificador: CT-02.5
+Caso de uso associado: UC-02
+Objetivo: Testar comportamento do sistema ao inserir um código totalmente 
+inválido/inexistente (Situação de falha).
+Entrada: Código aleatório/não criado ("XYZ-9999").
+Passos:
+1. Inserir código inexistente.
+2. Confirmar presença.
+Resultado Esperado: O sistema deve verificar na base e retornar "Código de aula não 
+encontrado".
+Urgência: Alta.
+3. MATRIZ DE RASTREABILIDADE
+Relacionamento entre os requisitos (Casos de Uso) e a cobertura dos testes, conforme 
+exigido nas instruções
